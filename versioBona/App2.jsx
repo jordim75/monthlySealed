@@ -104,8 +104,7 @@ export default function App() {
       return newCounts;
     });
   };
-  
-// 👉 Select/Unselect all Spells (colIndex = 1)
+
   const toggleAllSpells = (selectAll) => {
     const updates = {};
     let count = 0;
@@ -118,22 +117,6 @@ export default function App() {
     setSelectedCells((prev) => ({ ...prev, 1: updates }));
     setSelectedSpells(selectAll ? count : 0);
   };
-  
-// 👉 Select/Unselect all Atlas (colIndex = 2)
-const toggleAllAtlas = (selectAll) => {
-  const updates = {};
-  let count = 0;
-  data.rows.forEach((row, i) => {
-    if (row[2] && i !== 0) {
-      updates[i] = selectAll;
-      if (selectAll) count++;
-    }
-  });
-  setSelectedCells((prev) => ({ ...prev, 2: updates }));
-  setSelectedAtlas(selectAll ? count : 0);
-};
-
-
 
   const handleCopyToClipboard = () => {
     const allSelected = [];
@@ -317,25 +300,7 @@ const toggleAllAtlas = (selectAll) => {
             </button>
           </div>
         )}
-        {renderTable(
-  2,
-  true,
-  <div className="flex gap-1">
-    <button
-      onClick={() => toggleAllAtlas(true)}
-      className="text-xs px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded"
-    >
-      Select all
-    </button>
-    <button
-      onClick={() => toggleAllAtlas(false)}
-      className="text-xs px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded"
-    >
-      Unselect all
-    </button>
-  </div>
-)}
-
+        {renderTable(2, true)}
         {renderSitesTable()}
       </div>
     </div>

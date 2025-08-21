@@ -72,21 +72,22 @@ export default function Home({ onSelect }) {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Active players</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-        {players.map((p) => (
-          <button
-            key={p.sheetId}
-            onClick={() => onSelect(p)}   
-            className="w-full border-2 border-gray-400 rounded-xl p-4 text-center
-                       hover:bg-gray-100 hover:border-gray-600 
-                       transition-all duration-150 shadow-sm"
-            title={p.sheetId}
-          >
-            <span className="font-medium block">{p.playerName || p.sheetId}</span>
-            <span className="text-sm text-gray-500">{p.sheetId}</span>
-          </button>
-        ))}
-      </div>
+   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+  {players.map((p) => (
+    <button
+      key={p.sheetId}
+      onClick={() => onSelect(p.sheetId)}
+      className="w-full border-2 border-gray-400 rounded-xl p-4 text-center
+                 hover:bg-gray-100 hover:border-gray-600 
+                 transition-all duration-150 shadow-sm"
+      title={p.sheetId}
+    >
+      <span className="font-medium block">{p.playerName || p.sheetId}</span>
+      <span className="text-sm text-gray-500">{p.sheetId}</span>
+    </button>
+  ))}
+</div>
+
     </div>
   );
 }
