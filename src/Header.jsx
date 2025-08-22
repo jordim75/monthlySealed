@@ -7,7 +7,10 @@ export default function Header() {
         alt="Banner"
         className="w-full h-32 object-contain bg-black"
       />
-      <h1 className="text-4xl font-bold text-center py-4 bg-white">
+      <h1 className="absolute inset-0 flex items-center justify-center 
+                  text-5xl font-bold 
+                  text-white dark:text-gray-100 
+                  bg-black/40 dark:bg-black/60">
         Sealed league - Sorcerers at the Core
       </h1>
     </div>
