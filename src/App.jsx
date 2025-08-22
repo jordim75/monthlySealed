@@ -119,30 +119,33 @@ export default function App() {
   };
 
   const handleCopyToClipboard = () => {
-    const allSelected = [];
+  const allSelected = [];
 
-    Object.entries(selectedCells).forEach(([colIndex, rows]) => {
-      Object.entries(rows).forEach(([rowIndex, checked]) => {
-        if (checked) {
-          const val = data.rows[rowIndex]?.[colIndex];
-          if (val) allSelected.push("1 " + val);
-        }
-      });
-    });
-
-    siteCounts.forEach((count, i) => {
-      for (let j = 0; j < count; j++) {
-        allSelected.push("1 " + sitesData.rows[i]);
+  // Copiar només columnes 1, 2 i 3
+  [1, 2, 3].forEach((colIndex) => {
+    Object.entries(selectedCells[colIndex] || {}).forEach(([rowIndex, checked]) => {
+      if (checked) {
+        const val = data.rows[rowIndex]?.[colIndex];
+        if (val) allSelected.push("1 " + val);
       }
     });
-
-    if (allSelected.length > 0) {
-      navigator.clipboard.writeText(allSelected.join("\n"));
-      alert("Copied to clipboard!");
-    } else {
-      alert("No items selected.");
+  });
+  
+  // Copiar també els sites (quarta taula)
+  siteCounts.forEach((count, i) => {
+    for (let j = 0; j < count; j++) {
+      allSelected.push("1 " + sitesData.rows[i]);
     }
-  };
+  });
+
+  if (allSelected.length > 0) {
+    navigator.clipboard.writeText(allSelected.join("\n"));
+    alert("Copied to clipboard!");
+  } else {
+    alert("No items selected.");
+  }
+};
+
 
   const renderTable = (colIndex, withCheckbox = false, extraHeader = null) => (
     <table className="min-w-[200px] border-collapse border">
@@ -151,6 +154,7 @@ export default function App() {
           <th className="border px-2 py-1 flex justify-between items-center">
             <span>{data.headers[colIndex]}</span>
             {extraHeader}
+            
           </th>
         </tr>
       </thead>
@@ -194,46 +198,44 @@ export default function App() {
     { bg: "bg-yellow-800 dark:bg-yellow-500", text: "text-white dark:text-white" },
   ];
 
-  const renderSitesTable = () => (
-    <table className="min-w-[200px] border-collapse border">
-      <thead className="bg-gray-100 dark:bg-gray-800 sticky top-0">
-        <tr>
-          <th className="border px-2 py-1">
-            {sitesData.header}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {sitesData.rows.map((site, i) => {
-          const color = siteColors[i] || { bg: "", text: "" };
-          return (
-            <tr key={i} className={`hover:bg-gray-50 dark:hover:bg-gray-700`}>
-              <td
-                className={`border px-2 py-1 flex items-center justify-between ${color.bg} ${color.text}`}
-              >
-                <span>{site}</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleSiteChange(i, -1)}
-                    className="px-2 py-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded"
-                  >
-                    –
-                  </button>
-                  <span>{siteCounts[i]}</span>
-                  <button
-                    onClick={() => handleSiteChange(i, +1)}
-                    className="px-2 py-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded"
-                  >
-                    +
-                  </button>
-                </div>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
+ const renderSitesTable = () => (
+  <table className="min-w-[200px] border-collapse border">
+    <thead className="bg-gray-100 dark:bg-gray-800 sticky top-0">
+      <tr>
+        <th className="border px-2 py-1 text-left uppercase text-gray-600 dark:text-gray-100">
+          {sitesData.header}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {sitesData.rows.map((site, i) => {
+        const color = siteColors[i] || { bg: "", text: "" };
+        return (
+          <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+            <td className={`border px-2 py-1 flex items-center justify-between ${color.bg} ${color.text}`}>
+              <span>{site}</span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => handleSiteChange(i, -1)}
+                  className="px-1 py-0.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded text-sm"
+                >
+                  –
+                </button>
+                <span className="text-sm">{siteCounts[i]}</span>
+                <button
+                  onClick={() => handleSiteChange(i, +1)}
+                  className="px-1 py-0.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded text-sm"
+                >
+                  +
+                </button>
+              </div>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+);
 
   if (!sheet) {
     return <Home onSelect={(playerObj) => { setSheet(playerObj); setPlayer(playerObj); }} />;
@@ -285,21 +287,30 @@ export default function App() {
         </div>
       </div>
 
-      <div className="flex gap-6 overflow-auto max-h-[70vh]">
-        {renderTable(0, true)}
+      <div className="flex gap-6 overflow-auto max-h-[70vh] items-start">
+        {renderTable(0, true, (
+        <div className="flex justify-center w-full">
+    <button
+      onClick={() => {}}
+      className="text-xs px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500"
+    >
+      Which Avatar?
+    </button>
+    </div>
+  ))}
         {renderTable(
           1,
           true,
-          <div className="flex gap-1">
+          <div className="flex justify-center w-full">
             <button
               onClick={() => toggleAllSpells(true)}
-              className="text-xs px-2 py-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded"
+              className="text-xs px-2 py-1 rounded text-center bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded"
             >
               Select all
             </button>
             <button
               onClick={() => toggleAllSpells(false)}
-              className="text-xs px-2 py-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded"
+              className="text-xs px-2 py-1 rounded bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded"
             >
               Unselect all
             </button>
@@ -308,7 +319,7 @@ export default function App() {
         {renderTable(
           2,
           true,
-          <div className="flex gap-1">
+          <div className="flex justify-center w-full">
             <button
               onClick={() => toggleAllAtlas(true)}
               className="text-xs px-2 py-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 rounded"

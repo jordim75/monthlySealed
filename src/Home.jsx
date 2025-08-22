@@ -71,11 +71,11 @@ export default function Home({ onSelect }) {
             key={p.sheetId}
             onClick={() => onSelect(p)}
             className="w-full border-2 border-gray-400 dark:border-gray-600 rounded-xl p-4 text-center
-                       hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-gray-600 transition-all duration-150 shadow-sm"
+                       hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-gray-600 
+                       transition-all duration-150 shadow-sm text-black dark:text-white font-medium"
             title={p.sheetId}
           >
-            <span className="font-medium block text-black dark:text-white">{p.playerName || p.sheetId}</span>
-            <span className="text-sm text-gray-500 dark:text-gray-300">{p.sheetId}</span>
+            {p.playerName || p.sheetId}
           </button>
         ))}
       </div>
