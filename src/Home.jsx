@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Header from "./Header";
 
 export default function Home({ onSelect }) {
   const [players, setPlayers] = useState([]);
@@ -63,6 +64,8 @@ export default function Home({ onSelect }) {
     return <div className="p-6 text-black dark:text-white">No active players (Visible = YES) found in Control.</div>;
 
   return (
+  <div>
+      <Header />
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 text-black dark:text-white">Active players</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -80,5 +83,7 @@ export default function Home({ onSelect }) {
         ))}
       </div>
     </div>
+    
+</div>
   );
 }

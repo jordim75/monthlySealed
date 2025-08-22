@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Home from "./Home";
+import Header from "./Header";
 
 export default function App() {
   const [data, setData] = useState({ headers: [], rows: [] });
@@ -242,6 +243,8 @@ export default function App() {
   }
 
   return (
+  <div>
+      <Header />
     <div className="p-4 md:p-6">
       <button
         onClick={() => { setSheet(null); setPlayer(null); }}
@@ -337,5 +340,8 @@ export default function App() {
         {renderSitesTable()}
       </div>
     </div>
+  
+
+</div>
   );
 }
